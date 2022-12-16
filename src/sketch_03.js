@@ -1,7 +1,7 @@
 /*
 * Web Audio Workshop
 * U1 -> Web Audio API
-* Sketch_02 ->  buffering
+* Sketch_03 ->  gain node
 */
 
 const canvasSketch = require('canvas-sketch');
