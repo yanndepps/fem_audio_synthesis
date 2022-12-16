@@ -5,12 +5,13 @@ Some useful recipes and patterns.
 
 ## Contents
 
--   [Creating an Audio Tag](#org3b0f506)
--   [Loading an Audio Buffer](#org8d278d9)
--   [Playing an Audio Buffer](#org1c72abf)
+-   [Creating an Audio Tag](#orgdd36ff8)
+-   [Loading an Audio Buffer](#orgf9f736f)
+-   [Playing an Audio Buffer](#orgddb30f7)
+-   [Disabling Builtin Play/Pause Controls](#org997100a)
 
 
-<a id="org3b0f506"></a>
+<a id="orgdd36ff8"></a>
 
 ## Creating an Audio Tag
 
@@ -32,7 +33,7 @@ audioContext.resume();
 ```
 
 
-<a id="org8d278d9"></a>
+<a id="orgf9f736f"></a>
 
 ## Loading an Audio Buffer
 
@@ -61,7 +62,7 @@ async function loadSound() {
 ```
 
 
-<a id="org1c72abf"></a>
+<a id="orgddb30f7"></a>
 
 ## Playing an Audio Buffer
 
@@ -87,4 +88,16 @@ async function playSound() {
   // start ( zero -> play immediately )
   source.start(0);
 }
+```
+
+
+<a id="org997100a"></a>
+
+## Disabling Builtin Play/Pause Controls
+
+Browsers, by default, will play/pause `<audio>` elements on keyboard controls, and also sometimes when you connect and disconnect bluetooth headphones. In many app, one may want to override this.
+
+```js
+// just ignore this event
+navigator.mediaSession.setActionHandler('pause', () => {});
 ```

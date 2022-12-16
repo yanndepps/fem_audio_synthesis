@@ -1,8 +1,8 @@
 /*
-* Web Audio Workshop
-* U1 -> Web Audio API
-* Sketch_03 ->  gain node
-*/
+ * Web Audio Workshop
+ * U1 -> Web Audio API
+ * Sketch_03 ->  gain node
+ */
 
 const canvasSketch = require('canvas-sketch');
 const p5 = require('p5');
@@ -16,50 +16,47 @@ const settings = {
 };
 
 let audioContext;
-let audioBuffer;
+let audio;
+let gainNode;
 
 window.mousePressed = () => {
-	playSound();
-};
-
-async function loadSound() {
-	// re-use the same context if it exists
 	if (!audioContext) {
+		// create a new audioContext
 		audioContext = new AudioContext();
+
+		// create <audio> tag
+		audio = document.createElement('audio');
+
+		// set URL to the MP3
+		audio.src = '../assets/piano.mp3';
+
+		// to play audio through CDN
+		// audio.crossOrigin = 'Anonymouse';
+
+		// enable looping
+		audio.loop = true;
+
+		// play the audio
+		audio.play();
+
+		// create a "Media Element" source node
+		const source = audioContext.createMediaElementSource(audio);
+
+		// create a gain volume for adjustement
+		gainNode = audioContext.createGain();
+
+		// wire source to gain
+		source.connect(gainNode);
+
+		// wire gain -> speaker
+		gainNode.connect(audioContext.destination);
+	} else {
+		// clean up our element and audio context
+		audio.pause();
+		audioContext.close();
+		audioContext = audio = null;
 	}
-
-	// re-use the audio buffer as a source
-	if (!audioBuffer) {
-		// fetch MP3 from URL
-		const resp = await fetch('../assets/chime.mp3');
-
-		// turn into an array buffer of raw binary data
-		const buf = await resp.arrayBuffer();
-
-		// decode the entire binary MP3 into an AudioBuffer
-		audioBuffer = await audioContext.decodeAudioData(buf);
-	}
-}
-
-async function playSound() {
-	// ensure we are all loaded up
-	await loadSound();
-
-	// ensure we are in a resume state
-	await audioContext.resume();
-
-	// now create a new "buffer source" node for playing AudioBuffers
-	const source = audioContext.createBufferSource();
-
-	// connect to destination
-	source.connect(audioContext.destination);
-
-	// assign the loaded buffer
-	source.buffer = audioBuffer;
-
-	// start ( zero -> play immediately )
-	source.start(0);
-}
+};
 
 const sketch = () => {
 	return ({ width, height }) => {
@@ -69,8 +66,14 @@ const sketch = () => {
 
 		// draw play/pause button
 		const dim = min(width, height);
-		if (mouseIsPressed) {
-			circle(width / 2, height / 2, dim * 0.1);
+		if (audioContext) {
+			// get a new volume based on mouse pos
+			const volume = abs(mouseX - width / 2) / (width / 2);
+			// schedule a gradual shift in value with a small time constant
+			gainNode.gain.setTargetAtTime(volume, audioContext.currentTime, 0.01);
+			// draw a volume meter
+			rectMode(CENTER);
+			rect(width / 2, height / 2, dim * volume, dim * 0.05);
 		} else {
 			polygon(width / 2, height / 2, dim * 0.1, 3);
 		}
