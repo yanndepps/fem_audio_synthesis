@@ -16,48 +16,116 @@ const settings = {
 };
 
 let audioContext;
-let audio;
+let audioBuffer;
+let analyserNode;
+let analyserData;
+let gainNode;
+
 
 window.mousePressed = () => {
-	if (!audioContext) {
-		// setup audio
-		audioContext = new AudioContext();
-
-		// create a new <audio> tag
-		audio = document.createElement('audio');
-
-		// optional -> enable audio looping
-		audio.loop = true;
-
-		// set the URL of the audio asset
-		audio.src = '../assets/piano.mp3';
-
-		// trigger audio
-		audio.play();
-
-		const source = audioContext.createMediaElementSource(audio);
-
-		// wire the source to the speaker
-		source.connect(audioContext.destination);
-	} else {
-		// stop the audio
-		audio.pause();
-		audioContext.close();
-		audioContext = audio = null;
-	}
+	playSound();
 };
+
+async function loadSound() {
+	// re-use same context if existing
+	if (!audioContext) {
+		audioContext = new AudioContext();
+	}
+
+	// re-use the audio buffer as source
+	if (!audioBuffer) {
+		// fetch MP3 from URL
+		const resp = await fetch('../../assets/chime.mp3');
+
+		// turn into an array buffer of raw binary data
+		const buf = await resp.arrayBuffer();
+
+		// decode the entire binary MP3 into an AudioBuffer
+		audioBuffer = await audioContext.decodeAudioData(buf);
+	}
+
+	// setup a master gain node and AnalyserNode
+	if (!gainNode) {
+		// create a gain and connect it to dest
+		gainNode = audioContext.createGain();
+
+		// create an Analyser Node
+		analyserNode = audioContext.createAnalyser();
+
+		// create a Float32 array to hold the data
+		analyserData = new Float32Array(analyserNode.fftSize);
+
+		// connect the GainNode to the analyser
+		gainNode.connect(analyserNode);
+
+		// connect GainNode to destination as well
+		gainNode.connect(audioContext.destination);
+	}
+}
+
+async function playSound() {
+	// ensure we are loaded up
+	await loadSound();
+
+	// ensure we are in a resumed state
+	await audioContext.resume();
+
+	// create a new 'Buffer Source' node for playing AudioBuffers
+	const source = audioContext.createBufferSource();
+
+	// connect to gain (which will be analyzed and also sent to dest.)
+	source.connect(gainNode);
+
+	// assign the loaded buffer
+	source.buffer = audioBuffer;
+
+	// start
+	source.start(0);
+}
 
 const sketch = () => {
 	return ({ width, height }) => {
 		background(33);
-		fill(255);
-		noStroke();
 
 		// draw play/pause button
-		const dim = min(width, height);
-		if (audioContext) {
-			polygon(width / 2, height / 2, dim * 0.1, 4, PI / 4);
+		if (analyserNode) {
+			noFill();
+			stroke(255);
+
+			// get time domain data
+			analyserNode.getFloatTimeDomainData(analyserData);
+
+			beginShape();
+
+			for (let i = 0; i < analyserData.length; i++) {
+				// -1...1
+				const amplitude = analyserData[i];
+
+				const y = map(
+					amplitude,
+					-1,
+					1,
+					height / 2 - height / 4,
+					height / 2 + height / 4
+				);
+
+				const x = map(
+					i,
+					0,
+					analyserData.length - 1,
+					0,
+					width
+				);
+
+				vertex(x, y);
+			}
+
+			endShape();
 		} else {
+			fill(255);
+			noStroke();
+			// draw a play button
+			const dim = min(width, height);
 			polygon(width / 2, height / 2, dim * 0.1, 3);
 		}
 	};
