@@ -1,7 +1,7 @@
 /*
 * Web Audio Workshop
 * Sketch_01
-* play mp3 stream
+* play mp3 -> stream
 */
 
 const canvasSketch = require('canvas-sketch');
