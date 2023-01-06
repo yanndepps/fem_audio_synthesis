@@ -1,8 +1,8 @@
 /*
-* Web Audio Workshop
-* U2 -> Visualization
-* Sketch_01 -> waveform
-*/
+ * Web Audio Workshop
+ * U2 -> Visualization
+ * Sketch_01 -> waveform
+ */
 
 const canvasSketch = require('canvas-sketch');
 const p5 = require('p5');
