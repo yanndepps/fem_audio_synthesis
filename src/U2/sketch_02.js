@@ -10,7 +10,7 @@ new p5();
 
 const settings = {
 	p5: true,
-  dimensions: [ 1024, 1024 ],
+	dimensions: [1024, 1024],
 	animate: true,
 	context: '2d'
 };
@@ -18,7 +18,6 @@ const settings = {
 let audioContext;
 let analyserNode;
 let analyserData;
-let gainNode;
 let audio;
 let isFloat = false;
 let interval;
@@ -95,7 +94,7 @@ window.mousePressed = () => {
 
 const sketch = () => {
 	//---
-  return ({ time, width, height }) => {
+	return ({ time, width, height }) => {
 		background(0, 0, 0);
 		fill("white");
 		noStroke();
@@ -153,9 +152,9 @@ const sketch = () => {
 		} else {
 			// draw a play button
 			const dim = min(width, height);
-			polygon(width /2, height / 2, dim * 0.1, 3);
+			polygon(width / 2, height / 2, dim * 0.1, 3);
 		}
-  };
+	};
 };
 
 // draw a basic polygon, handles triangles, squares, pentagons, etc
