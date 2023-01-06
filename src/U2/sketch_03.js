@@ -1,7 +1,7 @@
 /*
  * Web Audio Workshop
  * U2 -> Visualization
- * Sketch_03 -> volume meter
+ * Sketch_03 -> volume
  */
 
 const canvasSketch = require('canvas-sketch');
