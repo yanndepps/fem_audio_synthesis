@@ -5,6 +5,7 @@
 ** Web Audio Synthesis & Visualization
 + A course by Matt DesLauriers, hosted at frontendmasters.com
 + Includes resources & course notes, demonstrating the raw Web Audio API, [[https://p5js.org/][p5.js]] and [[https://tonejs.github.io/][Tone.js]]
++ [[file:docs/snippets.org][snippets]]
 
 * Further Reading
 More links to web audio & creative coding:
