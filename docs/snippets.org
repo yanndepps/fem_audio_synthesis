@@ -125,7 +125,7 @@ function draw() {
 #+end_src
 
 * Root Mean Squared Metering
-Start with [[Analysing Audio Waveform]] snippet and then pass the data into the following function to get a signal between 0 and 1.
+Start with Analysing Audio Waveform snippet and then pass the data into the following function to get a signal between 0 and 1.
 
 #+begin_src js
 function rootMeanSquaredSignal(data) {
