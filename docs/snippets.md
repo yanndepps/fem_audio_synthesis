@@ -5,13 +5,15 @@ Some useful recipes and patterns.
 
 ## Contents
 
--   [Creating an Audio Tag](#orgdd36ff8)
--   [Loading an Audio Buffer](#orgf9f736f)
--   [Playing an Audio Buffer](#orgddb30f7)
--   [Disabling Builtin Play/Pause Controls](#org997100a)
+-   [Creating an Audio Tag](#org0a780f3)
+-   [Loading an Audio Buffer](#orge7c4f20)
+-   [Playing an Audio Buffer](#org78af554)
+-   [Disabling Builtin Play/Pause Controls](#org806935a)
+-   [Analysing Audio Waveform](#org0070733)
+-   [Analysing Audio Frequency](#org2bd6856)
+-   [Root Mean Squared Metering](#org61ae913)
+-   [Indexing into the Frequency Array](#org7a91cd4)
 
-
-<a id="orgdd36ff8"></a>
 
 ## Creating an Audio Tag
 
@@ -32,8 +34,6 @@ audio.play();
 audioContext.resume();
 ```
 
-
-<a id="orgf9f736f"></a>
 
 ## Loading an Audio Buffer
 
@@ -62,8 +62,6 @@ async function loadSound() {
 ```
 
 
-<a id="orgddb30f7"></a>
-
 ## Playing an Audio Buffer
 
 Relies on a `loadSound` function, as we can only play an audio buffer once it&rsquo;s been loaded and decoded asynchronously.
@@ -91,8 +89,6 @@ async function playSound() {
 ```
 
 
-<a id="org997100a"></a>
-
 ## Disabling Builtin Play/Pause Controls
 
 Browsers, by default, will play/pause `<audio>` elements on keyboard controls, and also sometimes when you connect and disconnect bluetooth headphones. In many app, one may want to override this.
@@ -100,4 +96,83 @@ Browsers, by default, will play/pause `<audio>` elements on keyboard controls, a
 ```js
 // just ignore this event
 navigator.mediaSession.setActionHandler('pause', () => {});
+```
+
+
+## Analysing Audio Waveform
+
+```js
+let data;
+let analyserNode;
+
+function setupAudio() {
+    /* ... create an audio 'source' node ... */
+
+    analyserNode = audioContext.createAnalyser();
+    signalData = new Float32Array(analyserNode.fftSize);
+
+    source.connect(analyserNode);
+}
+
+function draw() {
+    analyserNode.getFloatTimeDomainData(signalData);
+
+    /* ... now visualize ... */
+}
+```
+
+
+## Analysing Audio Frequency
+
+```js
+let data;
+let frequencyData;
+
+function setupAudio() {
+    /* ... create an audio 'source' node ... */
+
+    analyserNode = audioContext.createAnalyser();
+    frequencyData = new Float32Array(analyserNode.frequencyBinCount);
+
+    source.connect(analyserNode);
+}
+
+function draw() {
+    analyserNode.getFloatFrequenyData(frequencyData);
+    /* ... now visualize ... */
+}
+```
+
+
+## Root Mean Squared Metering
+
+Start with [1.6](#org0070733) snippet and then pass the data into the following function to get a signal between 0 and 1.
+
+```js
+function rootMeanSquaredSignal(data) {
+    let rms = 0;
+    for (let i = 0; i < data.length; i++) {
+        rms += data[i] * data[i];
+    }
+    return Math.sqrt(rms / data.length);
+}
+```
+
+
+## Indexing into the Frequency Array
+
+If we have an array that represents a list of frequency bins (i.e. where the indices represent a frequency band in Hz and the array elements represent it&rsquo;s signal in Db) we can convert from Hz to and index and back like so :
+
+```js
+// convert the frequency in Hz to an index in the array
+function frequencyToIndex(frequencyHz, sampleRate, frequencyBinCount) {
+    const nyquist = sampleRate / 2;
+    const index = Math.round((frequencyHz / nyquist) * frequencyBinCount);
+    return Math.min(frequencyBinCount, Math.max(0, index));
+}
+
+// convert an index in an array to frequency in Hz
+function indexToFrequency(index, sampleRate, frequencyBinCount) {
+    return (index * sampleRate) / (frequencyBinCount * 2);
+}
 ```
