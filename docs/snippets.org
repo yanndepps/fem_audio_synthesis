@@ -1,23 +1,15 @@
-# Snippets
+#+TITLE: snippets
+#+OPTIONS: toc:nil
 
+* Snippets
 Some useful recipes and patterns.
 
+* Contents
++ [[Loading an Audio Buffer][Loading an Audio Buffer]]
 
-## Contents
+* Creating an Audio Tag
 
--   [Creating an Audio Tag](#org0a780f3)
--   [Loading an Audio Buffer](#orge7c4f20)
--   [Playing an Audio Buffer](#org78af554)
--   [Disabling Builtin Play/Pause Controls](#org806935a)
--   [Analysing Audio Waveform](#org0070733)
--   [Analysing Audio Frequency](#org2bd6856)
--   [Root Mean Squared Metering](#org61ae913)
--   [Indexing into the Frequency Array](#org7a91cd4)
-
-
-## Creating an Audio Tag
-
-```js
+#+begin_src js
 // create <audio> tag
 const audio = document.createElement('audio');
 
@@ -32,12 +24,11 @@ audio.play();
 
 // it it's not already playing, resume audio context
 audioContext.resume();
-```
+#+end_src
 
+* Loading an Audio Buffer
 
-## Loading an Audio Buffer
-
-```js
+#+begin_src js
 let audioContext;
 let audioBuffer
 
@@ -59,14 +50,12 @@ async function loadSound() {
     audioBuffer = await audioContext.decodeAudioData(buf);
   }
 }
-```
+#+end_src
 
+* Playing an Audio Buffer
+Relies on a ~loadSound~ function, as we can only play an audio buffer once it's been loaded and decoded asynchronously.
 
-## Playing an Audio Buffer
-
-Relies on a `loadSound` function, as we can only play an audio buffer once it&rsquo;s been loaded and decoded asynchronously.
-
-```js
+#+begin_src js
 async function playSound() {
   // ensure we are all loaded up
   await loadSound();
@@ -86,22 +75,19 @@ async function playSound() {
   // start ( zero -> play immediately )
   source.start(0);
 }
-```
+#+end_src
 
+* Disabling Builtin Play/Pause Controls
+Browsers, by default, will play/pause ~<audio>~ elements on keyboard controls, and also sometimes when you connect and disconnect bluetooth headphones. In many app, one may want to override this.
 
-## Disabling Builtin Play/Pause Controls
-
-Browsers, by default, will play/pause `<audio>` elements on keyboard controls, and also sometimes when you connect and disconnect bluetooth headphones. In many app, one may want to override this.
-
-```js
+#+begin_src js
 // just ignore this event
 navigator.mediaSession.setActionHandler('pause', () => {});
-```
+#+end_src
 
+* Analysing Audio Waveform
 
-## Analysing Audio Waveform
-
-```js
+#+begin_src js
 let data;
 let analyserNode;
 
@@ -119,12 +105,11 @@ function draw() {
 
     /* ... now visualize ... */
 }
-```
+#+end_src
 
+* Analysing Audio Frequency
 
-## Analysing Audio Frequency
-
-```js
+#+begin_src js
 let data;
 let frequencyData;
 
@@ -141,14 +126,12 @@ function draw() {
     analyserNode.getFloatFrequenyData(frequencyData);
     /* ... now visualize ... */
 }
-```
+#+end_src
 
+* Root Mean Squared Metering
+Start with [[Analysing Audio Waveform]] snippet and then pass the data into the following function to get a signal between 0 and 1.
 
-## Root Mean Squared Metering
-
-Start with [1.6](#org0070733) snippet and then pass the data into the following function to get a signal between 0 and 1.
-
-```js
+#+begin_src js
 function rootMeanSquaredSignal(data) {
     let rms = 0;
     for (let i = 0; i < data.length; i++) {
@@ -156,14 +139,12 @@ function rootMeanSquaredSignal(data) {
     }
     return Math.sqrt(rms / data.length);
 }
-```
+#+end_src
 
+* Indexing into the Frequency Array
+If we have an array that represents a list of frequency bins (i.e. where the indices represent a frequency band in Hz and the array elements represent it's signal in Db) we can convert from Hz to and index and back like so :
 
-## Indexing into the Frequency Array
-
-If we have an array that represents a list of frequency bins (i.e. where the indices represent a frequency band in Hz and the array elements represent it&rsquo;s signal in Db) we can convert from Hz to and index and back like so :
-
-```js
+#+begin_src js
 // convert the frequency in Hz to an index in the array
 function frequencyToIndex(frequencyHz, sampleRate, frequencyBinCount) {
     const nyquist = sampleRate / 2;
@@ -175,4 +156,4 @@ function frequencyToIndex(frequencyHz, sampleRate, frequencyBinCount) {
 function indexToFrequency(index, sampleRate, frequencyBinCount) {
     return (index * sampleRate) / (frequencyBinCount * 2);
 }
-```
+#+end_src
