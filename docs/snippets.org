@@ -1,11 +1,7 @@
-#+TITLE: snippets
 #+OPTIONS: toc:nil
 
 * Snippets
 Some useful recipes and patterns.
-
-* Contents
-+ [[Loading an Audio Buffer][Loading an Audio Buffer]]
 
 * Creating an Audio Tag
 
