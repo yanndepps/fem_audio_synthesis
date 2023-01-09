@@ -29,7 +29,7 @@ window.mousePressed = () => {
 		audio = document.createElement('audio');
 
 		// set URL
-		audio.src = '../../assets/piano.mp3';
+		audio.src = '../../assets/bluejeans.mp3';
 
 		// play audio through CDN
 		audio.crossOrigin = 'Anonymous';
