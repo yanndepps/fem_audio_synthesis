@@ -1,5 +1,5 @@
 #+AUTHOR: depps
-#+OPTIONS: toc:nil
+#+OPTIONS: toc:2
 
 * About
 ** Web Audio Synthesis & Visualization
@@ -9,3 +9,5 @@
 
 * Further Reading
 More links to web audio & creative coding:
+** Resources & Tutorials
++ [[https://github.com/notthetup/awesome-webaudio][awesome-web-audio]] — A list that includes resources, books and more on Web Audio
