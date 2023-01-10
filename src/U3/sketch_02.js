@@ -10,7 +10,7 @@ new p5();
 
 const settings = {
 	p5: true,
-	dimensions: [1024, 1024],
+	dimensions: [512, 512],
 	animate: true,
 	context: '2d',
 };
@@ -111,7 +111,6 @@ const sketch = () => {
 		background(currentHue, 50, 50);
 
 		for (let i = 0; i < count; i++) {
-			const t = map(i, 0, count - 1, 0, 1);
 			const c = color((currentHue + 90 * ((i + 1) / count)) % 360, 50, 50);
 
 			const minBaseHz = 200;

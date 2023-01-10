@@ -10,7 +10,8 @@ new p5();
 
 const settings = {
 	p5: true,
-	dimensions: [1024, 1024],
+	// dimensions: [1024, 1024],
+	dimensions: [512, 512],
 	animate: true,
 	context: '2d',
 };
@@ -85,12 +86,12 @@ const sketch = () => {
 
 			// draw the low freq signal
 			stroke('#E84420');
-			const drum = audioSignal(analyserNode, frequencyData, 150, 2500);
+			const drum = audioSignal(analyserNode, frequencyData, 10, 100);
 			circle(cx, cy, radius * drum);
 
 			// draw the higher freq signal
 			stroke('#F4CD00');
-			const voice = audioSignal(analyserNode, frequencyData, 50, 150);
+			const voice = audioSignal(analyserNode, frequencyData, 5000, 7000);
 			circle(cx, cy, radius * voice);
 		} else {
 			polygon(width / 2, height / 2, dim * 0.1, 3);
