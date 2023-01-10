@@ -11,3 +11,16 @@
 More links to web audio & creative coding:
 ** Resources & Tutorials
 + [[https://github.com/notthetup/awesome-webaudio][awesome-web-audio]] — A list that includes resources, books and more on Web Audio
++ [[https://thecodingtrain.com/][The Coding Train]] — with Daniel Shiffman
++ [[https://frontendmasters.com/courses/canvas-webgl/][Creative Coding with Canvas & WebGL]] — with Matt DesLauriers, exploring creative coding & generative art
++ [[https://github.com/willianjusten/awesome-audio-visualization][awesome-audio-visualization]] — A large list of interesting Web Audio visualizer
++ [[https://github.com/terkelg/awesome-creative-coding][awesome-creative-coding]] — A large list of resources
+
+** Math
++ [[https://www.mathsisfun.com/algebra/trig-interactive-unit-circle.html][Sine / Cosine Reference]]
++ [[https://www.desmos.com/calculator/hlqxvc6hho?lang=fr][Sine & Cosine Calculator]]
++ [[https://github.com/Jam3/math-as-code][math-as-code]] — A cheat sheet for mathematical notation in code form
++ [[https://www.youtube.com/@codingmath/featured][Codng Math]] —  an ongoing series of video tutorials designed to teach you the math you need to understand as a programmer
+
+** Tools
++ [[https://spectrum.surge.sh/][Spectrum Analyser]] — see the frequency spectrum of an MP3 file
